@@ -44,6 +44,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(128), index=True, nullable=False, unique=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship('Role', backref=db.backref('users', lazy='dynamic'))
+    # experience = db.Column(db.Integer, default=0)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

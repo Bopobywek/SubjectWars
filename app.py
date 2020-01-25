@@ -26,15 +26,18 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect('/')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -52,7 +55,7 @@ def login():
         else:
             login_user(user)
             flash('Logged in successfully', category='success')
-            return redirect(url_for('index'))
+            return redirect(url_for('tasks_gen'))
     for errors in form.errors.values():
         for error in errors:
             flash(error, category='danger')
@@ -84,9 +87,14 @@ def registration():
     return render_template('regform.html', form=form, title='Registration')
 
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
 @app.route('/tasks_generating', methods=['GET', 'POST'])
 @login_required
-def index():
+def tasks_gen():
     form = SelectSubjectForm()
     if form.is_submitted():
         session['subject'] = SUBJ_TO_PATH[SUBJECTS[int(form.select.data)]]
