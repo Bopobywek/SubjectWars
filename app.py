@@ -26,6 +26,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,6 +72,11 @@ def registration():
         elif User.query.filter_by(email=form.email.data).first() is not None:
             flash('Email is busy', category='danger')
             return redirect(url_for('registration'))
+        else:
+            user = User(username=form.username.data, email=form.email.data)
+            user.set_password(form.password.data)
+            add_to_db([user])
+            flash('Successful', category='success')
         return redirect(url_for('login'))
     for errors in form.errors.values():
         for error in errors:
@@ -70,7 +84,7 @@ def registration():
     return render_template('regform.html', form=form, title='Registration')
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/tasks_generating', methods=['GET', 'POST'])
 @login_required
 def index():
     form = SelectSubjectForm()
@@ -90,7 +104,7 @@ def tasks():
 @app.route('/create/task', methods=['GET', 'POST'])
 def create_task():
     form = CreateTaskform()
-    if form.is_submitted():
+    if form.validate_on_submit():
         subject = Subject.query.filter(Subject.name == SUBJ_TO_PATH[SUBJECTS[int(form.select.data)]]).first()
         task = Task(subject=subject, level=1, title=form.title.data, body=form.body.data, answer=form.answer.data)
         add_to_db([task])
