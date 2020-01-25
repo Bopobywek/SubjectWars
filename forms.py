@@ -4,3 +4,4 @@ from wtforms import StringField, TextAreaField
 class CreateTaskform():
     title = StringField('Title')
     body = TextAreaField('Body')
+    answer = StringField('Answer')
