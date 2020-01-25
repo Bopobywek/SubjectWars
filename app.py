@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, session, request, redirect, url_for, flash, req
+from flask import Flask, render_template, session, request, redirect, url_for, flash
 from flask_login import LoginManager, login_user, \
     current_user, logout_user, login_required
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -50,9 +50,8 @@ def generate_day_task():
 scheduler.add_job(func=generate_day_task, trigger="interval", seconds=86400)
 
 
-@app.before_request
 def check_time():
-    if 86400 < (datetime.now() - current_user.last_date).total_seconds() < 86400*2:
+    if 86400 < (datetime.now() - current_user.last_date).total_seconds() < 86400 * 2:
         current_user.boost = 10
         add_to_db([current_user])
 
@@ -128,19 +127,23 @@ def t():
     return 'ok'
 
 
-
 @app.route('/day_task')
+@login_required
 def task_of_day():
     task = Task.query.filter(Task.day_task == True).first()
+    if task is None:
+        return render_template('fail.html')
     return redirect('/tasks/{}'.format(task.id))
 
 
 @app.route('/tasks/<int:task_id>', methods=['GET', 'POST'])
+@login_required
 def solve_task(task_id):
     task = Task.query.filter_by(id=task_id).first()
     form = SolverForm()
     if form.validate_on_submit():
         if form.answer.data == task.answer:
+            check_time()
             if task.day_task:
                 current_user.experience += task.level * current_user.boost * 3 * task.level
             else:
@@ -148,6 +151,8 @@ def solve_task(task_id):
             flash('Теперь ваш опыт составляет {} очков!'.format(current_user.experience), category='success')
             flash('Верно! Ваш опыт повышается!', category='success')
             current_user.solved_tasks.append(task)
+            current_user.boost = 7
+            current_user.last_date = datetime.now()
             add_to_db([current_user])
             return redirect(url_for('tasks'))
         else:
@@ -174,6 +179,7 @@ def tasks_gen():
 
 
 @app.route('/tasks')
+@login_required
 def tasks():
     task = Task.query.filter(
         Task.subject_id == Subject.query.filter(Subject.name == session.get('subject')).first().id).all()
@@ -182,6 +188,7 @@ def tasks():
 
 
 @app.route('/tasks/create', methods=['GET', 'POST'])
+@login_required
 def create_task():
     form = CreateTaskform()
     if form.is_submitted():
