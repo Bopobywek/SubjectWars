@@ -1,9 +1,9 @@
 import os
+from datetime import datetime
 
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
-
 
 SUBJECTS = ['phys', 'math', 'history', 'russian', 'english']
 PERMISSIONS = ['admin', 'teacher', 'student']
@@ -15,6 +15,9 @@ users_subjects_like = db.Table('UserTagsLike', db.metadata, db.Column('user_id',
 users_subjects_dislike = db.Table('UserTagsDislike', db.metadata,
                                   db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                                   db.Column('subject_id', db.Integer, db.ForeignKey('subject.id')))
+users_tasks = db.Table('UsersTasks', db.metadata,
+                       db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                       db.Column('task_id', db.Integer, db.ForeignKey('task.id')))
 
 
 class Task(db.Model):
@@ -22,6 +25,7 @@ class Task(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'))
     subject = db.relationship('Subject', backref=db.backref('tasks', lazy='dynamic'))
     level = db.Column(db.Integer)
+    day_task = db.Column(db.Boolean)
     title = db.Column(db.String(140), unique=True)
     body = db.Column(db.Text)
     answer = db.Column(db.String(100))
@@ -44,7 +48,10 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(128), index=True, nullable=False, unique=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
     role = db.relationship('Role', backref=db.backref('users', lazy='dynamic'))
-    # experience = db.Column(db.Integer, default=0)
+    solved_tasks = db.relationship('Task', secondary=users_tasks, backref=db.backref('users', lazy='dynamic'))
+    experience = db.Column(db.Integer, default=0)
+    last_date = db.Column(db.DateTime, default=datetime.now())
+    boost = db.Column(db.Integer, default=7)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -53,7 +60,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return '<User {} {} {}>'.format(self.username, self.email, self.status)
+        return '<User {} {}>'.format(self.username, self.email)
 
     subjects_like = db.relationship('Subject', secondary=users_subjects_like,
                                     backref=db.backref('user_like', lazy='dynamic'), lazy='dynamic')

@@ -9,4 +9,5 @@ class CreateTaskform(FlaskForm):
     title = StringField('Title')
     body = TextAreaField('Body')
     answer = StringField('Answer')
+    level = SelectField(choices=[(el, el) for el in range(1, 11)])
     submit = SubmitField('Отправить на модерацию')
