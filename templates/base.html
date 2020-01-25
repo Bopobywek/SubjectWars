@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Oswald');
+
+        .with-s {
+            width: 500px;
+            height: 200px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 8px rgba(204, 201, 210, 0.41);
+        }
+
+        body {
+            font-family: 'Oswald', sans-serif;
+            background: #f7f9f9;
+            line-height: 1.4;
+        }
+
+        .download-card {
+            height: 150px;
+            margin-top: 100px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 8px rgba(204, 201, 210, 0.41);
+        }
+
+        .form-file-upload {
+            width: 500px;
+            margin: auto;
+            margin-top: 120px;
+        }
+
+        .btn-tab {
+            padding: 10px;
+            width: 150px;
+            margin: auto;
+            margin-top: 25px;
+        }
+
+        footer {
+            height: 20px;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .main-section {
+            width: 350px;
+            margin: 0 auto;
+            margin-top: 50px;
+            padding: 0;
+        }
+
+        #sidebar-wrapper {
+            min-height: 100vh;
+            margin-left: -15rem;
+            -webkit-transition: margin .25s ease-out;
+            -moz-transition: margin .25s ease-out;
+            -o-transition: margin .25s ease-out;
+            transition: margin .25s ease-out;
+        }
+
+        #sidebar-wrapper .sidebar-heading {
+            padding: 0.875rem 1.25rem;
+            font-size: 1.2rem;
+        }
+
+        #sidebar-wrapper .sidebar-footer {
+            padding: 0.875rem 1.25rem;
+            position: fixed;
+            bottom: 0;
+            font-size: 0.8rem;
+        }
+
+        #sidebar-wrapper .list-group {
+            width: 15rem;
+        }
+
+        #page-content-wrapper {
+            min-width: 100vw;
+        }
+
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: 0;
+        }
+
+        @media (min-width: 768px) {
+            #sidebar-wrapper {
+                margin-left: 0;
+            }
+
+            #page-content-wrapper {
+                min-width: 0;
+                width: 100%;
+            }
+
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: -15rem;
+            }
+        }
+
+        .modal-content {
+            box-shadow: 0px 0px 3px #848484;
+            padding: 5px;
+        }
+
+        .card-text {
+            padding-top: 10px;
+            margin-bottom: -5px;
+        }
+    </style>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+<div class="d-flex toggled" id="wrapper">
+    <div class="bg-light" id="sidebar-wrapper">
+        <div class="sidebar-heading">Menu</div>
+        <div class="list-group list-group-flush">
+<!--            {% if not is_authenticated %}-->
+<!--            <a class="list-group-item list-group-item-action bg-light" href="/login">Sign in</a>-->
+<!--            <a class="list-group-item list-group-item-action bg-light" href="/registration">Sign up</a>-->
+<!--            {% else %}-->
+            <div class="list-group-item list-group-item-action bg-light">
+                <a class="dropdown-toggle" id="navbarDropdownMenuLink"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">username</a>
+                <div class="dropdown-menu dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="/logout">Log out</a>
+                </div>
+            </div>
+<!--            {% endif %}-->
+        </div>
+        <div class="sidebar-footer">Sidebar is found at <a
+                href="https://startbootstrap.com/templates/simple-sidebar/">Start Bootstrap</a></div>
+    </div>
+    <div id="page-content-wrapper">
+        <header>
+
+
+            <nav class="navbar navbar-dark bg-dark sticky-top" style="box-shadow: 0 2px 5px rgba(51,51,53,0.84);">
+                <a class="navbar-brand" href="/">SubjectWars</a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        id="menu-toggle">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </nav>
+        </header>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show text-center" style="width: 400px; float: left;
+position: fixed;
+right: 5px;top: 85%;height: 60px;display: block;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <p style="margin: auto;">{{ message }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <footer class="fixed-footer" >
+
+            <div class="text-center" style="margin-top: 60px;">Created by Bopobywek and EgorS for
+                <a href="https://yandexlyceum.ru/"> GameHack4</a>
+                Gamefication Project
+            </div>
+
+        </footer>
+
+    </div>
+
+</div>
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+</body>
+</html>

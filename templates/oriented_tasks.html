@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="container" align="center">
+    {% for el in array %}
+    <div class="col">
+        <div class="card text-center with-s">
+            <div class="card-body">
+                <h5 class="card-title">{{el.title}}</h5>
+                <h6 class="card-title">Уровень сложности {{el.level}}</h6>
+                <p class="card-text">{{el.body}}</p>
+                <a href="/picture-convert" class="btn btn-primary btn-tab">Choose!</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% if len(array) == 0 %}
+    <h1>Задачи по данному предмету отсутствуют</h1>
+    {% endif %}
+</div>
+
+{% endblock %}
