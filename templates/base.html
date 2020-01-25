@@ -154,8 +154,8 @@ background-position: center top;
         <div class="sidebar-heading">Menu</div>
         <div class="list-group list-group-flush">
             {% if not current_user.is_authenticated %}
-            <a class="list-group-item list-group-item-action bg-light" href="/login">Sign in</a>
-            <a class="list-group-item list-group-item-action bg-light" href="/registration">Sign up</a>
+            <a class="list-group-item list-group-item-action bg-light" href="/login">Войти в аккаунт</a>
+            <a class="list-group-item list-group-item-action bg-light" href="/registration">Зарегистрироваться</a>
             {% else %}
             <div class="list-group-item list-group-item-action bg-light">
                 <a class="dropdown-toggle" id="navbarDropdownMenuLink"
@@ -163,7 +163,7 @@ background-position: center top;
                    aria-haspopup="true"
                    aria-expanded="false">{{ current_user.username }}</a>
                 <div class="dropdown-menu dropdown-dark" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="/logout">Log out</a>
+                    <a class="dropdown-item" href="/logout">Выйти</a>
                 </div>
             </div>
             <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;" href="/rating">Рейтинг</a>
@@ -171,8 +171,6 @@ background-position: center top;
                 Дня</a>
             <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;"
                href="/tasks/generating">Все задачи</a>
-            <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;"
-               href="/rating">Кланы</a>
 
             {% endif %}
         </div>
@@ -223,10 +221,6 @@ right: 5px;top: 85%;height: 60px;display: block;">
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
-
-
-
-
 </script>
 </body>
 </html>

@@ -31,6 +31,15 @@ class Task(db.Model):
     answer = db.Column(db.String(100))
 
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = db.relationship('User', backref=db.backref('messages', lazy='dynamic'))
+    msg = db.Column(db.Text, nullable=False)
+    topic_id = db.Column(db.Integer, db.ForeignKey('task.id'))
+    topic = db.relationship('Task', backref=db.backref('messages', lazy='dynamic'))
+
+
 class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(140), unique=True)

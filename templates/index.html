@@ -11,6 +11,10 @@
 <!--  <p>тут можно что нибдь вставить... я просто ничего не придумал</p>-->
   <a class="btn btn-primary btn-lg" href="/faq" role="button">Узнай больше</a>
   <p style="padding-top: 10px;">Или</p>
+  {% if current_user.is_authenticated%}
+  <a class="btn btn-primary btn-lg" href="/tasks/generating" role="button">Начни решать</a>
+  {% else %}
   <a class="btn btn-primary btn-lg" href="/registration" role="button">Начни решать</a>
+  {% endif %}
 </div>
 {% endblock %}

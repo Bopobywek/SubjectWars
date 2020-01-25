@@ -22,5 +22,22 @@
             </form>
         </div>
     </div>
+    <form method="post">
+        {{ form2.hidden_tag() }}
+        <div class="input-group mb-3">
+            {{ form2.comment(class="form-control", placeholder="Комментарий", aria_describedby="button-addon2") }}
+            <div class="input-group-append">
+                {{ form2.submit(class="btn btn-outline-secondary", id="button-addon2") }}
+            </div>
+        </div>
+    </form>
+    {% for msg in messages %}
+    <div class="card" style="width: 18rem; margin: auto; margin-bottom: 10px;" align="center">
+        <div class="card-body">
+            <h5 class="card-title">{{ msg.msg }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">от {{ msg.author.username }}</h6>
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

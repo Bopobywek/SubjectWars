@@ -6,13 +6,14 @@ from flask_login import LoginManager, login_user, \
     current_user, logout_user, login_required
 from apscheduler.schedulers.background import BackgroundScheduler
 from selectsubjectform import SelectSubjectForm
-from db import db, Task, init_database, Subject, add_to_db, User
+from db import db, Task, init_database, Subject, add_to_db, User, Message
 
 from config import Config
 from create_task_form import CreateTaskform
 from login_form import LoginForm
 from reg_form import RegForm
 from SolverForm import SolverForm
+from comment_form import CommentForm
 
 SUBJECTS = {1: 'Физика', 2: 'Математика', 3: 'Русский язык', 4: 'История', 5: 'Английский язык'}
 SUBJ_TO_PATH = {'Физика': 'phys', 'Математика': 'math', 'Русский язык': 'russian', 'История': 'history',
@@ -141,6 +142,7 @@ def task_of_day():
 def solve_task(task_id):
     task = Task.query.filter_by(id=task_id).first()
     form = SolverForm()
+    form2 = CommentForm()
     if form.validate_on_submit():
         if form.answer.data == task.answer:
             check_time()
@@ -158,7 +160,14 @@ def solve_task(task_id):
         else:
             flash('Неверный ответ :с Попробуй ещё раз', category='danger')
             return redirect('/tasks/{}'.format(task_id))
-    return render_template('solve_task.html', task=task, form=form)
+    elif form2.validate_on_submit():
+        msg = Message(msg=form2.comment.data)
+        task.messages.append(msg)
+        current_user.messages.append(msg)
+        add_to_db([msg, task, current_user])
+        form2.comment.data = ''
+        return render_template('solve_task.html', task=task, form=form, form2=form2, messages=task.messages)
+    return render_template('solve_task.html', task=task, form=form, form2=form2)
 
 
 @app.route('/rating')
