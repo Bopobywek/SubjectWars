@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="container" align="center" style="width: inherit;">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Mail</th>
+            <th scope="col">Points</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for el in array %}
+        <tr>
+            <th scope="row">{{ el[0] }}</th>
+            <td>{{ el[1].username }}</td>
+            <td>{{ el[1].email }}</td>
+            <td>{{ el[1].experience }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

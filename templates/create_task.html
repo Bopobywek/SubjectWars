@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="main-section" id="#Auth">
+    <div class="modal-dialog text-center">
+        <div id="formContainer" class="modal-content">
+            <h2 style="padding-bottom: 15px;">Создай задачку</h2>
+            <form class="col-12" style="margin-top: 10px;" action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.select() }}
+                </div>
+                <div class="form-group">
+                    {{ form.title(placeholder="Заголовок", class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.body(placeholder="Содержание", class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.answer(placeholder="Ответ", class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <p>Уровень сложности</p>
+                    {{ form.level(class="form-control") }}
+                </div>
+                {{ form.submit(class="btn btn-primary") }}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

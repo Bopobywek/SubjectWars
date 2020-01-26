@@ -1,0 +1,20 @@
+
+{% extends 'base.html' %}
+
+{% block title %}SubjectWars{% endblock %}
+
+
+{% block content %}
+<div class="text-center">
+  <h1 style="margin-top: 20px;" class="display-4">SubjectWars</h1>
+  <p class="lead" style="padding: 40px;">Наш веб-сервис - это платформа, где каждый ученик может выбрать свои любимые предметы, а также указать свои проблемные места в учебе (неуспеваемость по какому-либо предмету). Платформа предложит наборы задач, основываясь на предпочтениях пользователя. После этого ученик выберет для себя самые подоходящие задачи.</p>
+<!--  <p>тут можно что нибдь вставить... я просто ничего не придумал</p>-->
+  <a class="btn btn-primary btn-lg" href="/faq" role="button">Узнай больше</a>
+  <p style="padding-top: 10px;">Или</p>
+  {% if current_user.is_authenticated%}
+  <a class="btn btn-primary btn-lg" href="/tasks/generating" role="button">Начни решать</a>
+  {% else %}
+  <a class="btn btn-primary btn-lg" href="/registration" role="button">Начни решать</a>
+  {% endif %}
+</div>
+{% endblock %}

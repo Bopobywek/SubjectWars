@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="main-section" id="#Auth">
+    {% if task.day_task == True %}
+    <h2 align="center">Задача дня</h2>
+    {% endif %}
+    <div class="modal-dialog text-center">
+        <div id="formContainer" class="modal-content">
+            <h3 class="form-group">
+                {{ task.title }}
+            </h3>
+            <h4 class="form-group">
+                {{ task.body }}
+            </h4>
+            <form class="col-12" style="margin-top: 10px;" action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.answer(placeholder="Ответ", class="form-control") }}
+                </div>
+                {{ form.submit(class="btn btn-success") }}
+            </form>
+        </div>
+    </div>
+    <form method="post">
+        {{ form2.hidden_tag() }}
+        <div class="input-group mb-3">
+            {{ form2.comment(class="form-control", placeholder="Комментарий", aria_describedby="button-addon2") }}
+            <div class="input-group-append">
+                {{ form2.submit(class="btn btn-outline-secondary", id="button-addon2") }}
+            </div>
+        </div>
+    </form>
+    {% for msg in messages %}
+    <div class="card" style="width: 18rem; margin: auto; margin-bottom: 10px;" align="center">
+        <div class="card-body">
+            <h5 class="card-title">{{ msg.msg }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">от {{ msg.author.username }}</h6>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
