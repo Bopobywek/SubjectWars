@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import pickle
 
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -62,6 +63,12 @@ class User(UserMixin, db.Model):
     experience = db.Column(db.Integer, default=0)
     last_date = db.Column(db.DateTime, default=datetime.now())
     boost = db.Column(db.Integer, default=7)
+    # solved_tasks_on_days = db.Column(db.PickleType)
+    #
+    # def set_day(self, day):
+    #     res = pickle.loads(self.solved_tasks_on_days)
+    #     res[day] = res.get(day, 0) + 1
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
