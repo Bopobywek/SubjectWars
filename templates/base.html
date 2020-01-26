@@ -172,8 +172,15 @@ background-position: center top;
             <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;" href="/day_task">Задача
                 Дня</a>
             <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;"
-               href="/tasks/generating">Все задачи</a>
-
+               href="/tasks">Все задачи</a>
+            <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;"
+               href="/tasks/create">Создать задачу</a>
+            <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;"
+               href="/tasks/generating">Выбрать предметную задачку</a>
+            {% if current_user.role_id == 1 %}
+            <a class="list-group-item list-group-item-action bg-light" style="margin-right: 10px;"
+               href="/tasks/check">Проверить предложенные задачи</a>
+            {% endif %}
             {% endif %}
         </div>
         <div class="sidebar-footer">Sidebar is found at <a

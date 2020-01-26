@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
 
 SUBJECTS = ['phys', 'math', 'history', 'russian', 'english']
-PERMISSIONS = ['admin', 'teacher', 'student']
+PERMISSIONS = ['admin', 'student']
 
 db = SQLAlchemy()
 
@@ -26,6 +26,7 @@ class Task(db.Model):
     subject = db.relationship('Subject', backref=db.backref('tasks', lazy='dynamic'))
     level = db.Column(db.Integer)
     day_task = db.Column(db.Boolean)
+    is_checked = db.Column(db.Boolean)
     title = db.Column(db.String(140), unique=True)
     body = db.Column(db.Text)
     answer = db.Column(db.String(100))
@@ -56,7 +57,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     email = db.Column(db.String(128), index=True, nullable=False, unique=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
-    role = db.relationship('Role', backref=db.backref('users', lazy='dynamic'))
+    role = db.relationship('Role', backref=db.backref('users'))
     solved_tasks = db.relationship('Task', secondary=users_tasks, backref=db.backref('users', lazy='dynamic'))
     experience = db.Column(db.Integer, default=0)
     last_date = db.Column(db.DateTime, default=datetime.now())
@@ -97,3 +98,8 @@ def init_database():
         db.create_all()
         init_base_subjects()
         init_permission()
+        admin = User(username='root', email='root@root.ru')
+        admin.set_password('admin')
+        role = Role.query.filter_by(name='admin').first()
+        role.users.append(admin)
+        add_to_db([admin, role])

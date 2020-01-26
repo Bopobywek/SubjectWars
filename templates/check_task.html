@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="container">
+{% for el in array %}
+            <div class="row">
+
+    {% if el[0] % 2 == 0 %}
+            <div class="col">
+                <div class="card text-center with-s" style="-ms-text-size-adjust: auto; height: auto;">
+                    <div class="card-body">
+                        <h5 class="card-title">Название: {{el[1].title}}</h5>
+                        <h5 class="card-title"> Предмет: {{el[1].subject.name}}</h5>
+                        <p class="card-text">Условие: {{el[1].body}}</p>
+                        <p class="card-text">Уровень сложности: {{el[1].level}}</p>
+                        <a href="/tasks/confirm/{{ el[1].id}}" class="btn btn-success btn-tab">Одобрить!</a>
+                        <a href="/tasks/change/{{ el[1].id}}" class="btn btn-warning btn-tab">Изменить!</a>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="row">
+    {% else %}
+        <div class="col">
+                <div class="card text-center with-s" style="-ms-text-size-adjust: auto; height: auto;">
+                    <div class="card-body">
+                        <h5 class="card-title">Название: {{el[1].title}}</h5>
+                        <h5 class="card-title"> Предмет: {{el[1].subject.name}}</h5>
+                        <p class="card-text">Условие: {{el[1].body}}</p>
+                        <p class="card-text">Уровень сложности: {{el[1].level}}</p>
+                        <a href="/tasks/confirm/{{ el[1].id}}" class="btn btn-success btn-tab">Одобрить!</a>
+                        <a href="/tasks/change/{{ el[1].id}}" class="btn btn-warning btn-tab">Изменить!</a>
+                    </div>
+                </div>
+            </div>
+    {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
