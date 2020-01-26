@@ -112,7 +112,7 @@ def check_tasks():
     if current_user.role_id == 1:
         task = Task.query.filter_by(is_checked=False).all()
         if len(task) == 0:
-            flash('Отличная работа! Ты проверил все возиожные задачи', category='success')
+            flash('Нет задач для проверки', category='success')
             return redirect('/')
         return render_template('check_task.html', array=enumerate(task, start=1))
     flash('Вам сюда нельзя >:(', category='danger')
@@ -234,7 +234,6 @@ def change(task_id):
     form = ChangeTaskForm()
     form.title.data = task.title
     form.body.data = task.body
-    form.level.data = task.level
     form.answer.data = task.answer
     form.select.data = SUBJECTS_ENG_TO_ID[task.subject.name]
     if form.is_submitted():
