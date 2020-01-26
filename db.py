@@ -94,7 +94,7 @@ def init_permission():
 
 
 def init_database():
-    if 'test.db' not in os.listdir():
+    if 'test.db' not in os.listdir('.'):
         db.create_all()
         init_base_subjects()
         init_permission()

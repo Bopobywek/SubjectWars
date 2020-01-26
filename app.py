@@ -66,8 +66,10 @@ scheduler.add_job(func=generate_day_task, trigger="interval", seconds=86400)
 
 
 def check_time():
-    if 86400 < (datetime.now() - current_user.last_date).total_seconds() < 86400 * 2:
+    if 3600*8 < (datetime.now() - current_user.last_date).total_seconds() < 3600*24:
+        flash('У вас появился бонус: ваш множитель баллов за решение задачи возрастает!')
         current_user.boost = 10
+        current_user.last_date = datetime.now()
         add_to_db([current_user])
 
 
@@ -192,9 +194,9 @@ def solve_task(task_id):
     task = Task.query.filter_by(id=task_id, is_checked=True).first()
     form = SolverForm()
     form2 = CommentForm()
+    check_time()
     if form.validate_on_submit():
         if form.answer.data == task.answer:
-            check_time()
             if task.day_task:
                 current_user.experience += task.level * current_user.boost * 3 * task.level
             else:
@@ -225,6 +227,12 @@ def rating():
     users = User.query.all()
     users.sort(key=lambda x: x.experience, reverse=True)
     return render_template('rating.html', array=enumerate(users, start=1))
+
+
+@app.route('/progress')
+@login_required
+def progress():
+    return render_template('progress.html')
 
 
 @app.route('/tasks/change/<int:task_id>', methods=['GET', 'POST'])

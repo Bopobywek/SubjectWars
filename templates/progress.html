@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Прогресс{% endblock %}
+{% block content %}
+  <title>Гистограмма</title>
+  <script src="https://www.google.com/jsapi"></script>
+  <script>
+   google.load("visualization", "1", {packages:["corechart"]});
+   google.setOnLoadCallback(drawChart);
+   function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+     ['День', 'Решенные задачи', 'Нерешенные задачи'],
+     ['1', 2, 3],
+     ['2', 5, 3],
+     ['3', 2, 10]
+    ]);
+    var options = {
+     title: 'Ваш прогресс',
+     hAxis: {title: 'Дни'},
+     vAxis: {title: 'Задачи'}
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('progress'));
+    chart.draw(data, options);
+   }
+  </script>
+<div class="container" align="center">
+<div id="progress" style="width: 800px; height: 500px;"></div>
+</div>
+{% endblock %}
